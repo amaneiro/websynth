@@ -1,18 +1,19 @@
 var playSound = function init() {
-    try {
-        // Fix up for prefixing
-        window.AudioContext = window.AudioContext||window.webkitAudioContext;
-        var context = new AudioContext();
-        var oscillator = context.createOscillator();
-        var freq = document.getElementById('freq').value;
-        oscillator.frequency.value = freq;
-        oscillator.connect(context.destination);
-        oscillator.start(0);
-        oscillator.stop(1);
-    }
-    catch(e) {
-        alert('Web Audio API is not supported in this browser');
-    }
+    // Fix up for prefixing
+    window.AudioContext = window.AudioContext||window.webkitAudioContext;
+    var context = new AudioContext();
+    var vco = context.createOscillator();
+    var freq = document.getElementById('freq').value;
+    vco.frequency.value = freq;
+
+    vca = context.createGain();
+    vca.gain.value = document.getElementById('volume').value;
+
+    vco.connect(vca);
+    vca.connect(context.destination);
+
+    vco.start(0);
+    vco.stop(1);
 };
 
 var button = document.getElementById('play');
